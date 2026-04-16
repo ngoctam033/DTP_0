@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_template_form_dtp_teaching" model="ir.ui.view">
+        <field name="name">product.template.form.dtp.teaching</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="categ_id" position="after">
+                <field name="is_teaching_product"/>
+                <field name="subject_area" invisible="not is_teaching_product"/>
+                <field name="grade_level" invisible="not is_teaching_product"/>
+            </field>
+            <xpath expr="//field[@name='sale_ok']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='list_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='inventory']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page string="Teaching Info" name="dtp_teaching_info">
+                    <group>
+                        <field name="teaching_note" placeholder="Thông tin phục vụ giảng dạy, sử dụng trong lớp học..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_tree_dtp_teaching" model="ir.ui.view">
+        <field name="name">product.template.list.dtp.teaching</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="is_teaching_product" optional="show"/>
+                <field name="subject_area" optional="show"/>
+                <field name="grade_level" optional="show"/>
+                <field name="teaching_note" optional="show"/>
+                <field name="virtual_available" optional="hide"/>
+            </field>
+            <field name="list_price" position="attributes">
+                <attribute name="column_invisible">True</attribute>
+                <attribute name="optional">hide</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_product_template_search_dtp_teaching" model="ir.ui.view">
+        <field name="name">product.template.search.dtp.teaching</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <filter string="Sản phẩm dạy học" name="filter_teaching_product" domain="[('is_teaching_product', '=', True)]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="stock.product_template_action_product" model="ir.actions.act_window">
+        <field name="view_mode">list,form</field>
+        <field name="context">{'default_is_storable': True}</field>
+    </record>
+
+    <record id="action_dtp_teaching_product" model="ir.actions.act_window">
+        <field name="name">Sản phẩm dạy học</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_product_template_search_dtp_teaching"/>
+        <field name="domain">[('is_teaching_product', '=', True)]</field>
+        <field name="context">{'default_is_teaching_product': True}</field>
+    </record>
+
+    <record id="view_dtp_teaching_kit_list" model="ir.ui.view">
+        <field name="name">dtp.teaching.kit.list</field>
+        <field name="model">dtp.teaching.kit</field>
+        <field name="arch" type="xml">
+            <list string="Bộ dụng cụ dạy học">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="warehouse_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dtp_teaching_kit_form" model="ir.ui.view">
+        <field name="name">dtp.teaching.kit.form</field>
+        <field name="model">dtp.teaching.kit</field>
+        <field name="arch" type="xml">
+            <form string="Bộ dụng cụ dạy học">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Thành phần">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_tmpl_id"/>
+                                    <field name="quantity"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Mô tả">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock.menu_stock_warehouse_mgmt" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="stock.menu_warehouse_report" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="stock.menu_stock_config_settings" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="stock.stock_picking_type_menu" model="ir.ui.menu">
+        <field name="name">Tổng quan</field>
+    </record>
+
+    <record id="stock.menu_stock_inventory_control" model="ir.ui.menu">
+        <field name="name">Hàng hóa</field>
+    </record>
+</odoo>
