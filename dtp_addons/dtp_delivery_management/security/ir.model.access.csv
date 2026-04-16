@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dtp_delivery_order_user,dtp.delivery.order.user,model_dtp_delivery_order,base.group_user,1,1,1,1
+access_dtp_delivery_order_line_user,dtp.delivery.order.line.user,model_dtp_delivery_order_line,base.group_user,1,1,1,1

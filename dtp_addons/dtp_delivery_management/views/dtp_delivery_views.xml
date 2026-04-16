@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dtp_delivery_order_list" model="ir.ui.view">
+        <field name="name">dtp.delivery.order.list</field>
+        <field name="model">dtp.delivery.order</field>
+        <field name="arch" type="xml">
+            <list string="Đơn giao hàng">
+                <field name="name"/>
+                <field name="delivery_date"/>
+                <field name="school_id"/>
+                <field name="class_id"/>
+                <field name="warehouse_id"/>
+                <field name="responsible_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dtp_delivery_order_form" model="ir.ui.view">
+        <field name="name">dtp.delivery.order.form</field>
+        <field name="model">dtp.delivery.order</field>
+        <field name="arch" type="xml">
+            <form string="Đơn giao hàng">
+                <header>
+                    <button name="action_confirm" type="object" string="Xác nhận giao" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_view_picking" type="object" string="Xem phiếu xuất" invisible="not picking_id"/>
+                    <button name="action_mark_delivered" type="object" string="Đánh dấu đã giao" invisible="state != 'in_transit'"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state not in ('draft', 'in_transit')"/>
+                    <button name="action_reset_draft" type="object" string="Về nháp" invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_transit,delivered,cancelled"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="school_id"/>
+                            <field name="class_id"/>
+                            <field name="partner_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="delivery_date"/>
+                            <field name="warehouse_id"/>
+                            <field name="responsible_id"/>
+                            <field name="carrier_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="total_qty" readonly="1"/>
+                        <field name="picking_id" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Sản phẩm giao">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Ghi chú">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_picking_form_dtp_delivery" model="ir.ui.view">
+        <field name="name">stock.picking.form.dtp.delivery</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="dtp_delivery_order_id" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_dtp_delivery_order" model="ir.actions.act_window">
+        <field name="name">Quản lý giao hàng</field>
+        <field name="res_model">dtp.delivery.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_dtp_delivery_root" name="Quản lý giao hàng" parent="stock.menu_stock_root" sequence="40"/>
+    <menuitem id="menu_dtp_delivery_order" name="Đơn giao hàng" parent="menu_dtp_delivery_root" action="action_dtp_delivery_order" sequence="10"/>
+</odoo>
