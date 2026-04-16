@@ -23,9 +23,7 @@ class DtpSchool(models.Model):
                 ('destination_school_id', '=', school.id),
             ])
             school.history_count = history_model.search_count([
-                '|',
-                ('source_school_id', '=', school.id),
-                ('destination_school_id', '=', school.id),
+                ('school_id', '=', school.id),
             ])
 
     def action_view_delivery_orders(self):
@@ -68,5 +66,5 @@ class DtpSchool(models.Model):
             'name': 'Lịch sử cấp phát thiết bị',
             'res_model': 'dtp.product.history',
             'view_mode': 'list,form',
-            'domain': ['|', ('source_school_id', '=', self.id), ('destination_school_id', '=', self.id)],
+            'domain': [('school_id', '=', self.id)],
         }

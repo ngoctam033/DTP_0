@@ -50,22 +50,22 @@ class DtpReturnOrder(models.Model):
         for order in self:
             if history_model.search_count([('return_order_id', '=', order.id)]):
                 continue
-            history_vals = []
             for line in order.line_ids:
-                history_vals.append({
+                history_model.create_school_product_history({
                     'operation_type': 'return',
                     'operation_date': order.return_date,
                     'reference_name': order.name,
+                    'school_id': order.school_id.id,
+                    'class_id': order.class_id.id,
                     'product_id': line.product_id.id,
                     'quantity': line.quantity,
+                    'quantity_delta': -line.quantity,
                     'warehouse_id': order.warehouse_id.id,
                     'source_school_id': order.school_id.id,
                     'source_class_id': order.class_id.id,
                     'note': line.note or order.reason,
                     'return_order_id': order.id,
                 })
-            if history_vals:
-                history_model.create(history_vals)
 
     def action_confirm(self):
         for order in self:
@@ -123,7 +123,10 @@ class DtpReturnOrder(models.Model):
             'name': _('Lịch sử hàng hóa'),
             'res_model': 'dtp.product.history',
             'view_mode': 'list,form',
-            'domain': [('return_order_id', '=', self.id)],
+            'domain': [
+                ('school_id', '=', self.school_id.id),
+                ('product_id', 'in', self.line_ids.mapped('product_id').ids),
+            ],
         }
 
 

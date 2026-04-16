@@ -203,6 +203,7 @@
         <field name="arch" type="xml">
             <search string="Lịch sử hàng hóa">
                 <field name="reference_name"/>
+                <field name="school_id"/>
                 <field name="product_id"/>
                 <field name="product_code"/>
                 <field name="source_school_id"/>
@@ -210,6 +211,10 @@
                 <filter name="filter_delivery" string="Giao hàng" domain="[('operation_type', '=', 'delivery')]"/>
                 <filter name="filter_return" string="Thu hồi" domain="[('operation_type', '=', 'return')]"/>
                 <filter name="filter_transfer" string="Luân chuyển" domain="[('operation_type', '=', 'transfer')]"/>
+                <group>
+                    <filter string="Theo trường" name="groupby_school" domain="[]" context="{'group_by': 'school_id'}"/>
+                    <filter string="Theo sản phẩm" name="groupby_product" domain="[]" context="{'group_by': 'product_id'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -222,14 +227,16 @@
                 <field name="operation_date"/>
                 <field name="operation_type"/>
                 <field name="reference_name"/>
+                <field name="school_id"/>
+                <field name="class_id"/>
                 <field name="product_id"/>
                 <field name="product_code"/>
                 <field name="quantity"/>
+                <field name="quantity_delta"/>
+                <field name="balance_qty"/>
                 <field name="warehouse_id"/>
                 <field name="source_school_id"/>
-                <field name="source_class_id"/>
                 <field name="destination_school_id"/>
-                <field name="destination_class_id"/>
                 <field name="note"/>
             </list>
         </field>
@@ -251,6 +258,10 @@
                             <field name="quantity"/>
                         </group>
                         <group>
+                            <field name="school_id"/>
+                            <field name="class_id"/>
+                            <field name="quantity_delta"/>
+                            <field name="balance_qty"/>
                             <field name="warehouse_id"/>
                             <field name="source_school_id"/>
                             <field name="source_class_id"/>
@@ -312,6 +323,60 @@
         </field>
     </record>
 
+    <record id="view_dtp_school_product_track_list" model="ir.ui.view">
+        <field name="name">dtp.school.product.track.list</field>
+        <field name="model">dtp.school.product.track</field>
+        <field name="arch" type="xml">
+            <list string="Theo dõi cấp phát theo trường và sản phẩm">
+                <field name="school_id"/>
+                <field name="product_id"/>
+                <field name="product_code"/>
+                <field name="total_delivered"/>
+                <field name="total_returned"/>
+                <field name="total_transferred_in"/>
+                <field name="total_transferred_out"/>
+                <field name="qty_balance"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dtp_school_product_track_form" model="ir.ui.view">
+        <field name="name">dtp.school.product.track.form</field>
+        <field name="model">dtp.school.product.track</field>
+        <field name="arch" type="xml">
+            <form string="Theo dõi trường và sản phẩm">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="school_id"/>
+                            <field name="product_id"/>
+                            <field name="product_code"/>
+                        </group>
+                        <group>
+                            <field name="total_delivered"/>
+                            <field name="total_returned"/>
+                            <field name="total_transferred_in"/>
+                            <field name="total_transferred_out"/>
+                            <field name="qty_balance"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="history_ids" readonly="1">
+                            <list>
+                                <field name="operation_date"/>
+                                <field name="operation_type"/>
+                                <field name="reference_name"/>
+                                <field name="quantity_delta"/>
+                                <field name="balance_qty"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="view_stock_picking_form_dtp_delivery" model="ir.ui.view">
         <field name="name">stock.picking.form.dtp.delivery</field>
         <field name="model">stock.picking</field>
@@ -348,9 +413,16 @@
         <field name="search_view_id" ref="view_dtp_product_history_search"/>
     </record>
 
+    <record id="action_dtp_school_product_track" model="ir.actions.act_window">
+        <field name="name">Theo dõi theo trường &amp; sản phẩm</field>
+        <field name="res_model">dtp.school.product.track</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
     <menuitem id="menu_dtp_delivery_root" name="Điều phối hàng hóa" parent="stock.menu_stock_root" sequence="40"/>
     <menuitem id="menu_dtp_delivery_order" name="Đơn giao hàng" parent="menu_dtp_delivery_root" action="action_dtp_delivery_order" sequence="10"/>
     <menuitem id="menu_dtp_return_order" name="Thu hồi hàng" parent="menu_dtp_delivery_root" action="action_dtp_return_order" sequence="20"/>
     <menuitem id="menu_dtp_transfer_order" name="Luân chuyển hàng" parent="menu_dtp_delivery_root" action="action_dtp_transfer_order" sequence="30"/>
     <menuitem id="menu_dtp_product_history" name="Lịch sử hàng hóa" parent="menu_dtp_delivery_root" action="action_dtp_product_history" sequence="40"/>
+    <menuitem id="menu_dtp_school_product_track" name="Theo dõi trường &amp; sản phẩm" parent="menu_dtp_delivery_root" action="action_dtp_school_product_track" sequence="50"/>
 </odoo>

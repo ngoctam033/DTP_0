@@ -45,23 +45,39 @@ class DtpTransferOrder(models.Model):
         for order in self:
             if history_model.search_count([('transfer_order_id', '=', order.id)]):
                 continue
-            history_vals = []
             for line in order.line_ids:
-                history_vals.append({
+                history_model.create_school_product_history({
                     'operation_type': 'transfer',
                     'operation_date': order.transfer_date,
                     'reference_name': order.name,
+                    'school_id': order.source_school_id.id,
+                    'class_id': order.source_class_id.id,
                     'product_id': line.product_id.id,
                     'quantity': line.quantity,
+                    'quantity_delta': -line.quantity,
                     'source_school_id': order.source_school_id.id,
                     'source_class_id': order.source_class_id.id,
                     'destination_school_id': order.destination_school_id.id,
                     'destination_class_id': order.destination_class_id.id,
-                    'note': line.note or order.note,
+                    'note': (line.note or order.note or '') + ' | Chuyển đi',
                     'transfer_order_id': order.id,
                 })
-            if history_vals:
-                history_model.create(history_vals)
+                history_model.create_school_product_history({
+                    'operation_type': 'transfer',
+                    'operation_date': order.transfer_date,
+                    'reference_name': order.name,
+                    'school_id': order.destination_school_id.id,
+                    'class_id': order.destination_class_id.id,
+                    'product_id': line.product_id.id,
+                    'quantity': line.quantity,
+                    'quantity_delta': line.quantity,
+                    'source_school_id': order.source_school_id.id,
+                    'source_class_id': order.source_class_id.id,
+                    'destination_school_id': order.destination_school_id.id,
+                    'destination_class_id': order.destination_class_id.id,
+                    'note': (line.note or order.note or '') + ' | Nhận chuyển',
+                    'transfer_order_id': order.id,
+                })
 
     def action_confirm(self):
         for order in self:
@@ -85,7 +101,10 @@ class DtpTransferOrder(models.Model):
             'name': _('Lịch sử hàng hóa'),
             'res_model': 'dtp.product.history',
             'view_mode': 'list,form',
-            'domain': [('transfer_order_id', '=', self.id)],
+            'domain': [
+                ('school_id', 'in', [self.source_school_id.id, self.destination_school_id.id]),
+                ('product_id', 'in', self.line_ids.mapped('product_id').ids),
+            ],
         }
 
 
