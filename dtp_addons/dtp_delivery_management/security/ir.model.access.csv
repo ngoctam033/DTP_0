@@ -1,3 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_dtp_delivery_order_user,dtp.delivery.order.user,model_dtp_delivery_order,base.group_user,1,1,1,1
 access_dtp_delivery_order_line_user,dtp.delivery.order.line.user,model_dtp_delivery_order_line,base.group_user,1,1,1,1
+access_dtp_return_order_user,dtp.return.order.user,model_dtp_return_order,base.group_user,1,1,1,1
+access_dtp_return_order_line_user,dtp.return.order.line.user,model_dtp_return_order_line,base.group_user,1,1,1,1
+access_dtp_transfer_order_user,dtp.transfer.order.user,model_dtp_transfer_order,base.group_user,1,1,1,1
+access_dtp_transfer_order_line_user,dtp.transfer.order.line.user,model_dtp_transfer_order_line,base.group_user,1,1,1,1
+access_dtp_product_history_user,dtp.product.history.user,model_dtp_product_history,base.group_user,1,1,1,1

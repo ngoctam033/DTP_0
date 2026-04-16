@@ -7,4 +7,20 @@
         <field name="padding">4</field>
         <field name="company_id" eval="False"/>
     </record>
+
+    <record id="seq_dtp_return_order" model="ir.sequence">
+        <field name="name">DTP Return Order</field>
+        <field name="code">dtp.return.order</field>
+        <field name="prefix">THH/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_dtp_transfer_order" model="ir.sequence">
+        <field name="name">DTP Transfer Order</field>
+        <field name="code">dtp.transfer.order</field>
+        <field name="prefix">LC/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
 </odoo>

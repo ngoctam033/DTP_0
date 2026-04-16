@@ -2,56 +2,35 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
-class DtpDeliveryOrder(models.Model):
-    _name = 'dtp.delivery.order'
-    _description = 'DTP Delivery Order'
-    _order = 'delivery_date desc, id desc'
+class DtpReturnOrder(models.Model):
+    _name = 'dtp.return.order'
+    _description = 'DTP Return Order'
+    _order = 'return_date desc, id desc'
 
-    name = fields.Char(string='Mã giao hàng',
-                       required=True,
-                       copy=False,
-                       default='New',
-                       readonly=True)
-    school_id = fields.Many2one('dtp.school',
-                                string='Trường học',
-                                required=True)
-    class_id = fields.Many2one('dtp.school.class',
-                               string='Lớp học',
-                               domain="[('school_id', '=', school_id)]")
+    name = fields.Char(string='Mã thu hồi', required=True, copy=False, default='New', readonly=True)
+    school_id = fields.Many2one('dtp.school', string='Trường học', required=True)
+    class_id = fields.Many2one('dtp.school.class', string='Lớp học', domain="[('school_id', '=', school_id)]")
     salesperson_ids = fields.Many2many(
         'dtp.school.salesperson',
         string='Sale phụ trách',
         related='school_id.salesperson_ids',
         readonly=True,
     )
-    delivery_date = fields.Date(string='Ngày giao', default=fields.Date.context_today, required=True)
+    return_date = fields.Date(string='Ngày thu hồi', default=fields.Date.context_today, required=True)
     warehouse_id = fields.Many2one(
         'stock.warehouse',
-        string='Kho xuất',
+        string='Nhập về kho',
         required=True,
         default=lambda self: self.env['stock.warehouse'].search([], limit=1),
     )
-    carrier_name = fields.Selection(
-        [
-            ('external', 'Bên ngoài'),
-            ('internal', 'Nội bộ'),
-        ],
-        string='Đơn vị giao hàng',
-        default='internal',
-    )
-    note = fields.Text(string='Ghi chú')
+    reason = fields.Text(string='Lý do thu hồi')
     state = fields.Selection(
-        [
-            ('draft', 'Nháp'),
-            ('in_transit', 'Đang giao'),
-            ('delivered', 'Đã giao'),
-            ('cancelled', 'Đã hủy'),
-        ],
+        [('draft', 'Nháp'), ('returned', 'Đã thu hồi'), ('cancelled', 'Đã hủy')],
         string='Trạng thái',
         default='draft',
     )
-    picking_id = fields.Many2one('stock.picking', string='Phiếu xuất kho', readonly=True, copy=False)
-    line_ids = fields.One2many('dtp.delivery.order.line', 'order_id', string='Sản phẩm')
+    picking_id = fields.Many2one('stock.picking', string='Phiếu nhập kho', readonly=True, copy=False)
+    line_ids = fields.One2many('dtp.return.order.line', 'order_id', string='Sản phẩm')
     total_qty = fields.Float(string='Tổng số lượng', compute='_compute_total_qty')
 
     @api.depends('line_ids.quantity')
@@ -63,27 +42,27 @@ class DtpDeliveryOrder(models.Model):
     def create(self, vals_list):
         for vals in vals_list:
             if not vals.get('name') or vals['name'] == 'New':
-                vals['name'] = self.env['ir.sequence'].next_by_code('dtp.delivery.order') or 'New'
+                vals['name'] = self.env['ir.sequence'].next_by_code('dtp.return.order') or 'New'
         return super().create(vals_list)
 
     def _create_history_entries(self):
         history_model = self.env['dtp.product.history']
         for order in self:
-            if history_model.search_count([('delivery_order_id', '=', order.id)]):
+            if history_model.search_count([('return_order_id', '=', order.id)]):
                 continue
             history_vals = []
             for line in order.line_ids:
                 history_vals.append({
-                    'operation_type': 'delivery',
-                    'operation_date': order.delivery_date,
+                    'operation_type': 'return',
+                    'operation_date': order.return_date,
                     'reference_name': order.name,
                     'product_id': line.product_id.id,
                     'quantity': line.quantity,
                     'warehouse_id': order.warehouse_id.id,
-                    'destination_school_id': order.school_id.id,
-                    'destination_class_id': order.class_id.id,
-                    'note': line.note or order.note,
-                    'delivery_order_id': order.id,
+                    'source_school_id': order.school_id.id,
+                    'source_class_id': order.class_id.id,
+                    'note': line.note or order.reason,
+                    'return_order_id': order.id,
                 })
             if history_vals:
                 history_model.create(history_vals)
@@ -91,16 +70,15 @@ class DtpDeliveryOrder(models.Model):
     def action_confirm(self):
         for order in self:
             if not order.line_ids:
-                raise UserError(_('Vui lòng thêm ít nhất một sản phẩm để giao.'))
+                raise UserError(_('Vui lòng thêm ít nhất một sản phẩm để thu hồi.'))
             if not order.picking_id:
                 customer_location = self.env.ref('stock.stock_location_customers')
                 picking = self.env['stock.picking'].create({
-                    'picking_type_id': order.warehouse_id.out_type_id.id,
-                    'location_id': order.warehouse_id.lot_stock_id.id,
-                    'location_dest_id': customer_location.id,
+                    'picking_type_id': order.warehouse_id.in_type_id.id,
+                    'location_id': customer_location.id,
+                    'location_dest_id': order.warehouse_id.lot_stock_id.id,
                     'origin': order.name,
-                    'scheduled_date': order.delivery_date,
-                    'dtp_delivery_order_id': order.id,
+                    'scheduled_date': order.return_date,
                 })
                 for line in order.line_ids:
                     self.env['stock.move'].create({
@@ -109,19 +87,12 @@ class DtpDeliveryOrder(models.Model):
                         'product_uom_qty': line.quantity,
                         'product_uom': line.product_id.uom_id.id,
                         'picking_id': picking.id,
-                        'location_id': order.warehouse_id.lot_stock_id.id,
-                        'location_dest_id': customer_location.id,
+                        'location_id': customer_location.id,
+                        'location_dest_id': order.warehouse_id.lot_stock_id.id,
                     })
                 picking.action_confirm()
-                picking.action_assign()
                 order.picking_id = picking.id
-            order.state = 'in_transit'
-
-    def action_mark_delivered(self):
-        for order in self:
-            if order.picking_id and order.picking_id.state not in ('done', 'cancel'):
-                raise UserError(_('Hãy hoàn tất phiếu xuất kho trước khi đánh dấu đã giao.'))
-            order.state = 'delivered'
+            order.state = 'returned'
             order._create_history_entries()
 
     def action_cancel(self):
@@ -136,10 +107,10 @@ class DtpDeliveryOrder(models.Model):
     def action_view_picking(self):
         self.ensure_one()
         if not self.picking_id:
-            raise UserError(_('Đơn giao hàng này chưa có phiếu xuất kho.'))
+            raise UserError(_('Đơn thu hồi này chưa có phiếu nhập kho.'))
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Phiếu xuất kho'),
+            'name': _('Phiếu nhập kho'),
             'res_model': 'stock.picking',
             'view_mode': 'form',
             'res_id': self.picking_id.id,
@@ -152,16 +123,16 @@ class DtpDeliveryOrder(models.Model):
             'name': _('Lịch sử hàng hóa'),
             'res_model': 'dtp.product.history',
             'view_mode': 'list,form',
-            'domain': [('delivery_order_id', '=', self.id)],
+            'domain': [('return_order_id', '=', self.id)],
         }
 
 
-class DtpDeliveryOrderLine(models.Model):
-    _name = 'dtp.delivery.order.line'
-    _description = 'DTP Delivery Order Line'
+class DtpReturnOrderLine(models.Model):
+    _name = 'dtp.return.order.line'
+    _description = 'DTP Return Order Line'
     _order = 'id'
 
-    order_id = fields.Many2one('dtp.delivery.order', string='Đơn giao hàng', required=True, ondelete='cascade')
+    order_id = fields.Many2one('dtp.return.order', string='Đơn thu hồi', required=True, ondelete='cascade')
     product_id = fields.Many2one(
         'product.product',
         string='Sản phẩm',
@@ -170,9 +141,3 @@ class DtpDeliveryOrderLine(models.Model):
     )
     quantity = fields.Float(string='Số lượng', default=1.0, required=True)
     note = fields.Char(string='Ghi chú')
-
-
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
-
-    dtp_delivery_order_id = fields.Many2one('dtp.delivery.order', string='Đơn giao hàng DTP', copy=False)
