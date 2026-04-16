@@ -7,9 +7,11 @@
             <list string="Trường học">
                 <field name="name"/>
                 <field name="code"/>
+                <field name="school_level"/>
+                <field name="location_region"/>
+                <field name="province_name"/>
                 <field name="manager_name"/>
                 <field name="phone"/>
-                <field name="email"/>
             </list>
         </field>
     </record>
@@ -24,20 +26,30 @@
                         <group>
                             <field name="name"/>
                             <field name="code"/>
-                            <field name="partner_id"/>
+                            <field name="school_level"/>
                         </group>
                         <group>
                             <field name="manager_name"/>
                             <field name="phone"/>
                             <field name="email"/>
+                            <field name="salesperson_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group string="Khu vực trường học">
+                        <group>
+                            <field name="location_region"/>
+                            <field name="province_name" placeholder="HCM: nhập quận, vùng khác: nhập tỉnh"/>
+                        </group>
+                        <group>
+                            <field name="address_detail" placeholder="Địa chỉ cụ thể"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Lớp học">
                             <field name="class_ids">
-                                <list>
+                                <list editable="bottom">
                                     <field name="name"/>
-                                    <field name="grade_level"/>
+                                    <field name="grade_id"/>
                                     <field name="homeroom_teacher"/>
                                     <field name="student_count"/>
                                 </list>
@@ -47,6 +59,35 @@
                             <field name="note"/>
                         </page>
                     </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dtp_school_salesperson_list" model="ir.ui.view">
+        <field name="name">dtp.school.salesperson.list</field>
+        <field name="model">dtp.school.salesperson</field>
+        <field name="arch" type="xml">
+            <list string="Sale phụ trách">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_dtp_school_salesperson_form" model="ir.ui.view">
+        <field name="name">dtp.school.salesperson.form</field>
+        <field name="model">dtp.school.salesperson</field>
+        <field name="arch" type="xml">
+            <form string="Sale phụ trách">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="note"/>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -74,6 +115,17 @@
                         <field name="code"/>
                         <field name="description"/>
                     </group>
+                    <notebook>
+                        <page string="Dụng cụ học tập">
+                            <field name="equipment_line_ids">
+                                <list editable="bottom">
+                                    <field name="product_tmpl_id"/>
+                                    <field name="quantity"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -86,7 +138,8 @@
             <list string="Lớp học">
                 <field name="name"/>
                 <field name="school_id"/>
-                <field name="grade_level"/>
+                <field name="school_level"/>
+                <field name="grade_id"/>
                 <field name="homeroom_teacher"/>
                 <field name="student_count"/>
             </list>
@@ -104,7 +157,8 @@
                             <field name="name"/>
                             <field name="code"/>
                             <field name="school_id"/>
-                            <field name="grade_level"/>
+                            <field name="school_level" readonly="1"/>
+                            <field name="grade_id"/>
                         </group>
                         <group>
                             <field name="homeroom_teacher"/>
@@ -127,6 +181,12 @@
         <field name="view_mode">list,form</field>
     </record>
 
+    <record id="action_dtp_school_salesperson" model="ir.actions.act_window">
+        <field name="name">Sale phụ trách</field>
+        <field name="res_model">dtp.school.salesperson</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
     <record id="action_dtp_school_subject" model="ir.actions.act_window">
         <field name="name">Môn học</field>
         <field name="res_model">dtp.school.subject</field>
@@ -143,4 +203,5 @@
     <menuitem id="menu_dtp_school_school" name="Trường học" parent="menu_dtp_school_root" action="action_dtp_school" sequence="10"/>
     <menuitem id="menu_dtp_school_class" name="Lớp học" parent="menu_dtp_school_root" action="action_dtp_school_class" sequence="20"/>
     <menuitem id="menu_dtp_school_subject" name="Môn học" parent="menu_dtp_school_root" action="action_dtp_school_subject" sequence="30"/>
+    <menuitem id="menu_dtp_school_salesperson" name="Sale phụ trách" parent="menu_dtp_school_root" action="action_dtp_school_salesperson" sequence="40"/>
 </odoo>

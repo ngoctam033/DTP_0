@@ -6,6 +6,7 @@
     'category': 'Education',
     'depends': ['contacts', 'dtp_stock_management'],
     'data': [
+        'data/grade_data.xml',
         'security/ir.model.access.csv',
         'views/dtp_school_views.xml',
     ],
