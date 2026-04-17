@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="90" viewBox="0 0 340 90" role="img" aria-label="DTP Education Solutions">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7cc043"/>
+      <stop offset="100%" stop-color="#4d9f2d"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4fb4e7"/>
+      <stop offset="100%" stop-color="#1f6aa5"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffc928"/>
+      <stop offset="100%" stop-color="#f29d08"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(8 8)">
+    <ellipse cx="24" cy="18" rx="10" ry="14" fill="none" stroke="url(#g3)" stroke-width="7"/>
+    <ellipse cx="45" cy="27" rx="12" ry="18" fill="none" stroke="url(#g1)" stroke-width="8"/>
+    <ellipse cx="67" cy="34" rx="13" ry="20" fill="none" stroke="url(#g2)" stroke-width="9"/>
+  </g>
+  <text x="106" y="45" font-family="Verdana, DejaVu Sans, sans-serif" font-size="52" font-weight="700" fill="#113f6a">DTP</text>
+  <text x="108" y="74" font-family="Verdana, DejaVu Sans, sans-serif" font-size="21" fill="#113f6a">Education Solutions</text>
+</svg>
