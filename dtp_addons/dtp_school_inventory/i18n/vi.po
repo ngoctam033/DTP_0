@@ -1,0 +1,126 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * dtp_school_inventory
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server\n"
+"POT-Creation-Date: 2026-04-17 00:00+0000\n"
+"PO-Revision-Date: 2026-04-17 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: dtp_school_inventory
+#: model:ir.actions.act_window,name:dtp_school_inventory.action_dtp_school
+msgid "Quan ly truong hoc"
+msgstr "Quản lý trường học"
+
+#. module: dtp_school_inventory
+#: model:ir.actions.act_window,name:dtp_school_inventory.action_dtp_school_salesperson
+msgid "Nhan vien kinh doanh"
+msgstr "Nhân viên kinh doanh"
+
+#. module: dtp_school_inventory
+#: model:ir.actions.act_window,name:dtp_school_inventory.action_dtp_school_class
+msgid "Lop hoc"
+msgstr "Lớp học"
+
+#. module: dtp_school_inventory
+#: model:ir.actions.act_window,name:dtp_school_inventory.action_dtp_school_subject
+msgid "Mon hoc"
+msgstr "Môn học"
+
+#. module: dtp_school_inventory
+#: model:ir.ui.menu,name:dtp_school_inventory.menu_dtp_school_root
+#: model:ir.ui.menu,name:dtp_school_inventory.menu_dtp_school_management
+msgid "Truong hoc"
+msgstr "Trường học"
+
+#. module: dtp_school_inventory
+#: model:ir.ui.menu,name:dtp_school_inventory.menu_dtp_school_salespersons
+msgid "Nhan vien kinh doanh"
+msgstr "Nhân viên kinh doanh"
+
+#. module: dtp_school_inventory
+#: model:ir.ui.menu,name:dtp_school_inventory.menu_dtp_school_classes
+msgid "Lop hoc"
+msgstr "Lớp học"
+
+#. module: dtp_school_inventory
+#: model:ir.ui.menu,name:dtp_school_inventory.menu_dtp_school_subjects
+msgid "Mon hoc"
+msgstr "Môn học"
+
+#. module: dtp_school_inventory
+#: model:ir.model,name:dtp_school_inventory.model_dtp_school
+msgid "School"
+msgstr "Trường học"
+
+#. module: dtp_school_inventory
+#: model:ir.model,name:dtp_school_inventory.model_dtp_school_salesperson
+msgid "School Salesperson"
+msgstr "Nhân viên kinh doanh của trường"
+
+#. module: dtp_school_inventory
+#: model:ir.model,name:dtp_school_inventory.model_dtp_school_class
+msgid "School Class"
+msgstr "Lớp học"
+
+#. module: dtp_school_inventory
+#: model:ir.model,name:dtp_school_inventory.model_dtp_school_subject
+msgid "Class Subject"
+msgstr "Môn học"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school__school_type
+msgid "School Type"
+msgstr "Loại trường"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school__salesperson_ids
+msgid "Salespersons"
+msgstr "Nhân viên kinh doanh"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school__class_ids
+msgid "Classes"
+msgstr "Lớp học"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school_class__subject_ids
+msgid "Subjects"
+msgstr "Môn học"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school_class__class_count
+msgid "Class Count"
+msgstr "Số lượng lớp"
+
+#. module: dtp_school_inventory
+#: model:ir.model.fields,field_description:dtp_school_inventory.field_dtp_school_subject__supply_product_ids
+msgid "Learning Supplies"
+msgstr "Dụng cụ học tập"
+
+#. module: dtp_school_inventory
+#: selection:res.partner,school_type:0
+msgid "Mam non"
+msgstr "Mầm non"
+
+#. module: dtp_school_inventory
+#: selection:res.partner,school_type:0
+msgid "Cap 1"
+msgstr "Cấp 1"
+
+#. module: dtp_school_inventory
+#: selection:res.partner,school_type:0
+msgid "Cap 2"
+msgstr "Cấp 2"
+
+#. module: dtp_school_inventory
+#: selection:res.partner,region:0
+msgid "Hue"
+msgstr "Huế"
