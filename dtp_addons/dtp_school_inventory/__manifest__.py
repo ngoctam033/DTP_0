@@ -9,7 +9,7 @@
         'security/ir.model.access.csv',
         'data/school_sample_data.xml',
         'views/school_management_views.xml',
-        'views/stock_menu_disable_views.xml',
+        'views/stock_menu_custom_views.xml',
     ],
     'installable': True,
     'application': False,

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock.menu_stock_adjustments" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+    </record>
+    <record id="stock.menu_stock_procurement" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="stock.menu_procurement_compute" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <record id="stock.menu_warehouse_report" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
+    </record>
+
+    <menuitem id="menu_dtp_school_root" name="Truong hoc" parent="stock.menu_stock_root" sequence="80"/>
+    <menuitem id="menu_dtp_school_management" name="Truong hoc" parent="menu_dtp_school_root" action="action_dtp_school" sequence="1"/>
+    <menuitem id="menu_dtp_school_classes" name="Lop hoc" parent="menu_dtp_school_root" action="action_dtp_school_class" sequence="2"/>
+    <menuitem id="menu_dtp_school_subjects" name="Mon hoc" parent="menu_dtp_school_root" action="action_dtp_school_subject" sequence="3"/>
+
+</odoo>
