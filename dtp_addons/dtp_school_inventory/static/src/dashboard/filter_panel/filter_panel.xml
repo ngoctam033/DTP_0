@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.FilterPanel">
+    <div class="dtp-filter-panel">
+        <div class="dtp-filter-label">
+            <i class="fa fa-filter me-1"/> Bộ lọc (Context)
+        </div>
+
+        <!-- Slicer: Region -->
+        <div class="dtp-filter-slicer">
+            <label class="dtp-slicer-title">Khu vực</label>
+            <select class="dtp-slicer-select" t-on-change="onRegionChange">
+                <option value="All">Tất cả</option>
+                <t t-foreach="props.options.regions" t-as="opt" t-key="opt.value">
+                    <option
+                        t-att-value="opt.value"
+                        t-att-selected="props.filters.region === opt.value"
+                    ><t t-esc="opt.label"/></option>
+                </t>
+            </select>
+        </div>
+
+        <!-- Slicer: School type -->
+        <div class="dtp-filter-slicer">
+            <label class="dtp-slicer-title">Loại trường</label>
+            <select class="dtp-slicer-select" t-on-change="onSchoolTypeChange">
+                <option value="">Tất cả</option>
+                <t t-foreach="props.options.school_types" t-as="opt" t-key="opt.value">
+                    <option
+                        t-att-value="opt.value"
+                        t-att-selected="props.filters.school_type === opt.value"
+                    ><t t-esc="opt.label"/></option>
+                </t>
+            </select>
+        </div>
+
+        <!-- Slicer: School -->
+        <div class="dtp-filter-slicer">
+            <label class="dtp-slicer-title">Trường học</label>
+            <select class="dtp-slicer-select" t-on-change="onSchoolChange">
+                <option value="">Tất cả</option>
+                <t t-foreach="props.options.schools" t-as="school" t-key="school.id">
+                    <option
+                        t-att-value="school.id"
+                        t-att-selected="props.filters.school_id === school.id"
+                    ><t t-esc="school.name"/></option>
+                </t>
+            </select>
+        </div>
+
+        <!-- Active filter badges -->
+        <div class="dtp-filter-badges">
+            <t t-if="props.filters.region">
+                <span class="dtp-badge">
+                    Khu vực: <t t-esc="props.filters.region"/>
+                </span>
+            </t>
+            <t t-if="props.filters.school_type">
+                <span class="dtp-badge">
+                    Loại: <t t-esc="props.filters.school_type"/>
+                </span>
+            </t>
+            <t t-if="props.filters.school_id">
+                <span class="dtp-badge">
+                    Trường: #<t t-esc="props.filters.school_id"/>
+                </span>
+            </t>
+        </div>
+    </div>
+</t>
+</templates>

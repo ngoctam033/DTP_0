@@ -1,0 +1,524 @@
+/**
+ * DTP School Inventory Dashboard – Stylesheet
+ *
+ * Design: Dark-mode PowerBI-inspired.
+ * All selectors are scoped to .dtp-dashboard to avoid polluting Odoo globals.
+ *
+ * Sections:
+ *  1. CSS Variables (design tokens)
+ *  2. Layout shell
+ *  3. Header
+ *  4. Filter Panel
+ *  5. KPI Cards
+ *  6. Chart Cards (shared wrapper)
+ *  7. DonutChart
+ *  8. HorizontalBarChart
+ *  9. TrendLineChart
+ * 10. SchoolsTable
+ * 11. Loading + Empty states
+ * 12. Badges & status indicators
+ * 13. Animations
+ */
+
+/* ─── 1. Design tokens (Light Mode) ────────────────────────────────────────── */
+.dtp-dashboard {
+    --dtp-bg:          #f8fafc;
+    --dtp-surface:     #ffffff;
+    --dtp-surface-2:   #f1f5f9;
+    --dtp-border:      #e2e8f0;
+    --dtp-text:        #0f172a;
+    --dtp-text-muted:  #64748b;
+    --dtp-accent:      #2563eb;
+    --dtp-accent-dark: #1d4ed8;
+    --dtp-radius:      12px;
+    --dtp-gap:         16px;
+
+    --kpi-blue:   #3b82f6;
+    --kpi-teal:   #0d9488;
+    --kpi-amber:  #d97706;
+    --kpi-green:  #16a34a;
+    --kpi-gray:   #475569;
+    --kpi-red:    #dc2626;
+}
+
+/* ─── 2. Layout shell ────────────────────────────────────────────────────── */
+.dtp-dashboard {
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background: var(--dtp-bg);
+    color: var(--dtp-text);
+    font-family: 'Inter', 'Roboto', sans-serif;
+    padding: 0 0 32px;
+    overflow-x: hidden;
+}
+
+.dtp-dashboard-body {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--dtp-gap);
+}
+
+/* ─── 3. Header ──────────────────────────────────────────────────────────── */
+.dtp-dashboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    background: #fff;
+    border-bottom: 1px solid var(--dtp-border);
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.dtp-dashboard-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--dtp-text);
+    letter-spacing: 0.3px;
+}
+
+.dtp-dashboard-title .fa {
+    color: var(--dtp-accent);
+}
+
+/* ─── 4. Filter Panel ────────────────────────────────────────────────────── */
+.dtp-filter-panel {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--dtp-surface);
+    border: 1px solid var(--dtp-border);
+    border-radius: var(--dtp-radius);
+    margin: 0 20px 4px;
+}
+
+.dtp-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dtp-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-right: 8px;
+}
+
+.dtp-filter-slicer {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.dtp-slicer-title {
+    font-size: 10px;
+    color: var(--dtp-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dtp-slicer-select {
+    background: var(--dtp-surface-2);
+    color: var(--dtp-text);
+    border: 1px solid var(--dtp-border);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 13px;
+    outline: none;
+    cursor: pointer;
+    min-width: 150px;
+    transition: border-color 0.2s;
+}
+
+.dtp-slicer-select:focus {
+    border-color: var(--dtp-accent);
+    box-shadow: 0 0 0 2px rgba(79, 147, 240, 0.25);
+}
+
+.dtp-filter-badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: auto;
+}
+
+.dtp-badge {
+    background: rgba(79, 147, 240, 0.15);
+    color: var(--dtp-accent);
+    border: 1px solid rgba(79, 147, 240, 0.4);
+    border-radius: 20px;
+    font-size: 11px;
+    padding: 2px 10px;
+}
+
+/* ─── 5. KPI Cards ───────────────────────────────────────────────────────── */
+.dtp-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--dtp-gap);
+}
+
+@media (max-width: 1200px) {
+    .dtp-kpi-row { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .dtp-kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+.dtp-kpi-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--dtp-surface);
+    border: 1px solid var(--dtp-border);
+    border-radius: var(--dtp-radius);
+    border-left: 4px solid;
+    transition: transform 0.18s, box-shadow 0.18s;
+    position: relative;
+    overflow: hidden;
+}
+
+.dtp-kpi-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), transparent);
+    pointer-events: none;
+}
+
+.dtp-kpi-card.kpi-blue   { border-left-color: var(--kpi-blue);  }
+.dtp-kpi-card.kpi-teal   { border-left-color: var(--kpi-teal);  }
+.dtp-kpi-card.kpi-amber  { border-left-color: var(--kpi-amber); }
+.dtp-kpi-card.kpi-green  { border-left-color: var(--kpi-green); }
+.dtp-kpi-card.kpi-gray   { border-left-color: var(--kpi-gray);  }
+.dtp-kpi-card.kpi-red    { border-left-color: var(--kpi-red);   }
+
+.dtp-kpi-card--clickable {
+    cursor: pointer;
+}
+
+.dtp-kpi-card--clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.dtp-kpi-icon {
+    font-size: 24px;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.dtp-kpi-card.kpi-blue  .dtp-kpi-icon { color: var(--kpi-blue);  }
+.dtp-kpi-card.kpi-teal  .dtp-kpi-icon { color: var(--kpi-teal);  }
+.dtp-kpi-card.kpi-amber .dtp-kpi-icon { color: var(--kpi-amber); }
+.dtp-kpi-card.kpi-green .dtp-kpi-icon { color: var(--kpi-green); }
+.dtp-kpi-card.kpi-gray  .dtp-kpi-icon { color: var(--kpi-gray);  }
+.dtp-kpi-card.kpi-red   .dtp-kpi-icon { color: var(--kpi-red);   }
+
+.dtp-kpi-content { flex: 1; }
+
+.dtp-kpi-value {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--dtp-text);
+    letter-spacing: -0.5px;
+}
+
+.dtp-kpi-label {
+    font-size: 11px;
+    color: var(--dtp-text-muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dtp-kpi-arrow {
+    color: var(--dtp-text-muted);
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* ─── 6. Chart Cards (shared wrapper) ───────────────────────────────────── */
+.dtp-chart-row {
+    display: flex;
+    gap: var(--dtp-gap);
+}
+
+.dtp-chart-card {
+    background: var(--dtp-surface);
+    border: 1px solid var(--dtp-border);
+    border-radius: var(--dtp-radius);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    animation: dtpFadeIn 0.35s ease;
+}
+
+.dtp-chart-card--half { flex: 1; min-width: 0; }
+.dtp-chart-card--full { flex: 1; }
+
+.dtp-card-header {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dtp-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid var(--dtp-border);
+    padding-bottom: 10px;
+}
+
+/* ─── 7. DonutChart ──────────────────────────────────────────────────────── */
+.dtp-donut-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dtp-donut-chart {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+.dtp-donut-svg {
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+}
+
+.dtp-donut-slice {
+    cursor: pointer;
+    transition: opacity 0.18s;
+}
+
+.dtp-donut-slice:hover { opacity: 0.75; }
+
+.dtp-donut-center-value {
+    font-size: 22px;
+    font-weight: 800;
+    fill: var(--dtp-text);
+}
+
+.dtp-donut-center-label {
+    font-size: 11px;
+    fill: var(--dtp-text-muted);
+}
+
+.dtp-donut-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.dtp-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.dtp-legend-item:hover { background: var(--dtp-surface-2); }
+
+.dtp-legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.dtp-legend-label {
+    flex: 1;
+    font-size: 13px;
+    color: var(--dtp-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dtp-legend-value {
+    font-size: 12px;
+    color: var(--dtp-text-muted);
+    flex-shrink: 0;
+}
+
+/* ─── 8. HorizontalBarChart ─────────────────────────────────────────────── */
+.dtp-hbar-wrapper { width: 100%; }
+
+.dtp-hbar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dtp-hbar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dtp-hbar-label {
+    width: 160px;
+    font-size: 12px;
+    color: var(--dtp-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.dtp-hbar-track {
+    flex: 1;
+    height: 16px;
+    background: var(--dtp-surface-2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.dtp-hbar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 4px;
+}
+
+.dtp-hbar-value {
+    width: 36px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dtp-text);
+    flex-shrink: 0;
+}
+
+/* ─── 9. TrendLineChart ──────────────────────────────────────────────────── */
+.dtp-trend-wrapper { width: 100%; }
+
+.dtp-trend-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.dtp-trend-axis-label {
+    font-size: 9px;
+    fill: var(--dtp-text-muted);
+}
+
+.dtp-trend-dot {
+    cursor: pointer;
+    transition: r 0.15s;
+}
+
+.dtp-trend-dot:hover { r: 6; }
+
+/* ─── 10. SchoolsTable ───────────────────────────────────────────────────── */
+.dtp-table-wrapper { overflow-x: auto; }
+
+.dtp-schools-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.dtp-schools-table thead tr {
+    background: var(--dtp-surface-2);
+    border-bottom: 2px solid var(--dtp-border);
+}
+
+.dtp-schools-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--dtp-text-muted);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dtp-table-row {
+    border-bottom: 1px solid var(--dtp-border);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dtp-table-row:hover {
+    background: var(--dtp-surface-2);
+}
+
+.dtp-schools-table td {
+    padding: 10px 14px;
+    color: var(--dtp-text);
+    vertical-align: middle;
+}
+
+.dtp-table-school-name {
+    font-weight: 500;
+}
+
+.dtp-badge-type {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.dtp-type-Mầm\ non  { background: rgba(52, 201, 142, 0.15); color: #34c98e; border: 1px solid rgba(52,201,142,0.3); }
+.dtp-type-Tiểu\ học  { background: rgba(79, 147, 240, 0.15); color: #4f93f0; border: 1px solid rgba(79,147,240,0.3); }
+.dtp-type-THCS       { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139,92,246,0.3); }
+
+.dtp-count {
+    font-weight: 600;
+}
+
+.dtp-count--warn    { color: #f59e0b; }
+.dtp-count--success { color: #22c55e; }
+
+.dtp-health { font-size: 18px; }
+.dtp-health--pending { color: #f59e0b; }
+.dtp-health--ok      { color: #22c55e; }
+.dtp-health--idle    { color: #475569; }
+
+/* ─── 11. Loading + Empty states ────────────────────────────────────────── */
+.dtp-loading-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--dtp-text-muted);
+    font-size: 16px;
+}
+
+.dtp-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dtp-text-muted);
+    padding: 40px 20px;
+    opacity: 0.6;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* ─── 13. Animations ─────────────────────────────────────────────────────── */
+@keyframes dtpFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0);   }
+}
+
+.dtp-kpi-card {
+    animation: dtpFadeIn 0.3s ease both;
+}

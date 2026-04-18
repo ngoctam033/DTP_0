@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        ir.actions.client – Registers the OWL dashboard as an Odoo client action.
+        The `tag` value must match the key used in:
+            registry.category("actions").add("dtp_school_inventory_dashboard", ...)
+    -->
+    <record id="action_dtp_school_inventory_dashboard" model="ir.actions.client">
+        <field name="name">Inventory Dashboard</field>
+        <field name="tag">dtp_school_inventory_dashboard</field>
+    </record>
+
+    <!--
+        Override the stock_picking_type_menu menuitem to call our new dashboard action
+        instead of the original stock_picking_type_action (kanban of picking types).
+        The action field on ir.ui.menu is a Reference field — must write as "model,id" string.
+    -->
+    <record id="stock.stock_picking_type_menu" model="ir.ui.menu">
+        <field name="action" eval="'ir.actions.client,' + str(ref('dtp_school_inventory.action_dtp_school_inventory_dashboard'))"/>
+    </record>
+</odoo>

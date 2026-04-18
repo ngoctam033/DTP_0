@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.TrendLineChart">
+    <div class="dtp-trend-wrapper">
+
+        <!-- Not enough data -->
+        <t t-if="!hasData">
+            <div class="dtp-empty-state">
+                <i class="fa fa-line-chart fa-3x mb-2"/>
+                <div>Chưa đủ dữ liệu xu hướng (cần ít nhất 2 điểm)</div>
+            </div>
+        </t>
+
+        <!-- SVG Chart -->
+        <t t-if="hasData">
+            <svg
+                class="dtp-trend-svg"
+                t-att-viewBox="'0 0 560 160'"
+                preserveAspectRatio="xMidYMid meet"
+            >
+                <!-- Y-axis grid lines -->
+                <t t-foreach="chartGeometry.yTicks" t-as="tick" t-key="tick.y">
+                    <line
+                        x1="40" t-att-y1="tick.y"
+                        x2="540" t-att-y2="tick.y"
+                        stroke="#cbd5e1" stroke-width="0.5" stroke-dasharray="4,4"
+                    />
+                    <text
+                        x="36" t-att-y="tick.y + 4"
+                        text-anchor="end"
+                        class="dtp-trend-axis-label"
+                        t-esc="tick.label"
+                    />
+                </t>
+
+                <!-- Area fill -->
+                <path
+                    t-att-d="chartGeometry.areaPath"
+                    fill="rgba(79,147,240,0.15)"
+                    stroke="none"
+                />
+
+                <!-- Line -->
+                <polyline
+                    t-att-points="chartGeometry.polylinePoints"
+                    fill="none"
+                    stroke="#4f93f0"
+                    stroke-width="2.5"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                />
+
+                <!-- Data points + X labels -->
+                <t t-foreach="chartGeometry.points" t-as="pt" t-key="pt.label">
+                    <circle
+                        t-att-cx="pt.x" t-att-cy="pt.y"
+                        r="4"
+                        fill="#1d6fd4"
+                        stroke="#fff"
+                        stroke-width="2"
+                        class="dtp-trend-dot"
+                    >
+                        <title><t t-esc="pt.label"/>: <t t-esc="pt.value"/></title>
+                    </circle>
+                    <text
+                        t-att-x="pt.x" y="155"
+                        text-anchor="middle"
+                        class="dtp-trend-axis-label"
+                        t-esc="pt.label"
+                    />
+                </t>
+            </svg>
+        </t>
+
+    </div>
+</t>
+</templates>

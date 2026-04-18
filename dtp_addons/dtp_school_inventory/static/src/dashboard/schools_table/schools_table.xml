@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.SchoolsTable">
+    <div class="dtp-table-wrapper">
+
+        <t t-if="!hasData">
+            <div class="dtp-empty-state">
+                <i class="fa fa-table fa-3x mb-2"/>
+                <div>Không có dữ liệu trường học</div>
+            </div>
+        </t>
+
+        <t t-if="hasData">
+            <table class="dtp-schools-table">
+                <thead>
+                    <tr>
+                        <th>Tên trường</th>
+                        <th>Loại</th>
+                        <th>Khu vực</th>
+                        <th class="text-end">Số lớp</th>
+                        <th class="text-end">Số môn</th>
+                        <th class="text-end">Phiếu chờ</th>
+                        <th class="text-end">Phiếu xong</th>
+                        <th class="text-center">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="props.rows" t-as="row" t-key="row.id">
+                        <tr class="dtp-table-row" t-on-click="() => onRowClick(row)">
+                            <!-- Column: School name -->
+                            <td class="dtp-table-school-name">
+                                <i class="fa fa-building-o me-1 text-muted"/>
+                                <t t-esc="row.name"/>
+                            </td>
+
+                            <!-- Column: Type -->
+                            <td>
+                                <span t-attf-class="dtp-badge-type dtp-type-{{ row.school_type }}">
+                                    <t t-esc="row.school_type"/>
+                                </span>
+                            </td>
+
+                            <!-- Column: Region -->
+                            <td t-esc="row.region"/>
+
+                            <!-- Column: Class count -->
+                            <td class="text-end" t-esc="row.class_count"/>
+
+                            <!-- Column: Subject count -->
+                            <td class="text-end" t-esc="row.subject_count"/>
+
+                            <!-- Column: Pending pickings -->
+                            <td class="text-end">
+                                <span t-attf-class="dtp-count {{ row.pending_pickings > 0 ? 'dtp-count--warn' : '' }}">
+                                    <t t-esc="row.pending_pickings"/>
+                                </span>
+                            </td>
+
+                            <!-- Column: Done pickings -->
+                            <td class="text-end">
+                                <span t-attf-class="dtp-count {{ row.done_pickings > 0 ? 'dtp-count--success' : '' }}">
+                                    <t t-esc="row.done_pickings"/>
+                                </span>
+                            </td>
+
+                            <!-- Column: health indicator -->
+                            <td class="text-center">
+                                <t t-if="row.pending_pickings > 0">
+                                    <span class="dtp-health dtp-health--pending" title="Có phiếu chờ xử lý">●</span>
+                                </t>
+                                <t t-elif="row.done_pickings > 0">
+                                    <span class="dtp-health dtp-health--ok" title="Hoạt động tốt">●</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="dtp-health dtp-health--idle" title="Chưa có phiếu nào">●</span>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+        </t>
+
+    </div>
+</t>
+</templates>

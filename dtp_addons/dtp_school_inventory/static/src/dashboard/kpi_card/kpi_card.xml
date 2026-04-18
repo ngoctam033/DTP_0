@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.KpiCard">
+    <div
+        t-attf-class="dtp-kpi-card {{ props.colorClass }} {{ props.clickable ? 'dtp-kpi-card--clickable' : '' }}"
+        t-on-click="onClick"
+    >
+        <div class="dtp-kpi-icon">
+            <i t-attf-class="fa {{ props.icon }}"/>
+        </div>
+        <div class="dtp-kpi-content">
+            <div class="dtp-kpi-value" t-esc="displayValue"/>
+            <div class="dtp-kpi-label" t-esc="props.label"/>
+        </div>
+        <t t-if="props.clickable">
+            <div class="dtp-kpi-arrow"><i class="fa fa-arrow-right"/></div>
+        </t>
+    </div>
+</t>
+</templates>

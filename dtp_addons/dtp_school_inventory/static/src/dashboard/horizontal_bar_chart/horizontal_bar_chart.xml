@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.HorizontalBarChart">
+    <div class="dtp-hbar-wrapper">
+
+        <t t-if="!hasData">
+            <div class="dtp-empty-state">
+                <i class="fa fa-bar-chart fa-3x mb-2"/>
+                <div>Chưa có dữ liệu xuất kho</div>
+            </div>
+        </t>
+
+        <t t-if="hasData">
+            <div class="dtp-hbar-chart">
+                <t t-foreach="rows" t-as="row" t-key="row.label">
+                    <div class="dtp-hbar-row">
+                        <div class="dtp-hbar-label" t-esc="row.label"/>
+                        <div class="dtp-hbar-track">
+                            <div
+                                class="dtp-hbar-fill"
+                                t-att-style="'width:' + row.widthPct + '%;background:' + row.color"
+                            />
+                        </div>
+                        <div class="dtp-hbar-value" t-esc="row.value"/>
+                    </div>
+                </t>
+            </div>
+        </t>
+
+    </div>
+</t>
+</templates>

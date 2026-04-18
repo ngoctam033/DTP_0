@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="dtp_school_inventory.DonutChart">
+    <div class="dtp-donut-wrapper">
+
+        <!-- Empty state -->
+        <t t-if="!hasData">
+            <div class="dtp-empty-state">
+                <i class="fa fa-pie-chart fa-3x mb-2"/>
+                <div>Không có dữ liệu</div>
+            </div>
+        </t>
+
+        <!-- Chart + Legend -->
+        <t t-if="hasData">
+            <div class="dtp-donut-chart">
+                <svg viewBox="0 0 200 200" class="dtp-donut-svg">
+                    <!-- Slices -->
+                    <t t-foreach="slices" t-as="slice" t-key="slice.label">
+                        <path
+                            t-att-d="slice.path"
+                            t-att-stroke="slice.color"
+                            stroke-width="36"
+                            fill="none"
+                            class="dtp-donut-slice"
+                            t-on-click="() => onSliceClick(slice)"
+                        >
+                            <title><t t-esc="slice.label"/>: <t t-esc="slice.value"/> (<t t-esc="slice.pct"/>%)</title>
+                        </path>
+                    </t>
+                    <!-- Center label -->
+                    <text x="100" y="96" text-anchor="middle" class="dtp-donut-center-value">
+                        <t t-esc="props.data.reduce((s,d) => s + (d[props.valueKey] || 0), 0)"/>
+                    </text>
+                    <text x="100" y="114" text-anchor="middle" class="dtp-donut-center-label">Phiếu</text>
+                </svg>
+
+                <!-- Legend -->
+                <div class="dtp-donut-legend">
+                    <t t-foreach="slices" t-as="slice" t-key="slice.label">
+                        <div class="dtp-legend-item" t-on-click="() => onSliceClick(slice)">
+                            <span class="dtp-legend-color" t-att-style="'background:' + slice.color"/>
+                            <span class="dtp-legend-label" t-esc="slice.label"/>
+                            <span class="dtp-legend-value">
+                                <t t-esc="slice.value"/> (<t t-esc="slice.pct"/>%)
+                            </span>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </div>
+</t>
+</templates>

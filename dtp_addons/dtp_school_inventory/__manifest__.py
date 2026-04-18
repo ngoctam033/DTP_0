@@ -10,7 +10,15 @@
         'data/school_sample_data.xml',
         'views/school_management_views.xml',
         'views/stock_menu_custom_views.xml',
+        'views/dashboard_action.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'dtp_school_inventory/static/src/**/*.js',
+            'dtp_school_inventory/static/src/**/*.xml',
+            'dtp_school_inventory/static/src/**/*.scss',
+        ],
+    },
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
