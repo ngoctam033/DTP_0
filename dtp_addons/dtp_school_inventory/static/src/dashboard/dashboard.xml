@@ -43,7 +43,7 @@
                     icon="'fa-school'"
                     colorClass="'kpi-blue'"
                     clickable="true"
-                    onCardClick.bind="() => onKpiClick('res.partner')"
+                    onCardClick.bind="() => this.onKpiClick('res.partner')"
                 />
                 <KpiCard
                     label="'Lớp học'"
@@ -51,7 +51,7 @@
                     icon="'fa-graduation-cap'"
                     colorClass="'kpi-teal'"
                     clickable="true"
-                    onCardClick.bind="() => onKpiClick('res.partner.class')"
+                    onCardClick.bind="() => this.onKpiClick('res.partner.class')"
                 />
                 <KpiCard
                     label="'Phiếu chờ xử lý'"
@@ -59,7 +59,7 @@
                     icon="'fa-clock-o'"
                     colorClass="'kpi-amber'"
                     clickable="true"
-                    onCardClick.bind="() => onKpiClick('stock.picking', [['state', 'in', ['confirmed', 'waiting', 'assigned']]])"
+                    onCardClick.bind="() => this.onKpiClick('stock.picking', [['state', 'in', ['confirmed', 'waiting', 'assigned']]])"
                 />
                 <KpiCard
                     label="'Phiếu nháp'"
@@ -67,7 +67,7 @@
                     icon="'fa-file-o'"
                     colorClass="'kpi-gray'"
                     clickable="true"
-                    onCardClick.bind="() => onKpiClick('stock.picking', [['state', '=', 'draft']])"
+                    onCardClick.bind="() => this.onKpiClick('stock.picking', [['state', '=', 'draft']])"
                 />
                 <KpiCard
                     label="'Phiếu trễ hạn'"
@@ -75,7 +75,7 @@
                     icon="'fa-exclamation-triangle'"
                     colorClass="'kpi-red'"
                     clickable="true"
-                    onCardClick.bind="() => onKpiClick('stock.picking', [['state', 'in', ['confirmed', 'waiting', 'assigned']], ['scheduled_date', '&lt;=', _now]])"
+                    onCardClick.bind="() => this.onKpiClick('stock.picking', [['state', 'in', ['confirmed', 'waiting', 'assigned']], ['scheduled_date', '&lt;=', this._now]])"
                 />
             </div>
 
@@ -87,7 +87,7 @@
                         data="state.pickings_by_state"
                         labelKey="'label'"
                         valueKey="'count'"
-                        onSliceClick.bind="(item) => onPickingStateClick(item.state)"
+                        onSliceClick.bind="(item) => this.onKpiClick('stock.picking', [['state', '=', item.state]])"
                     />
                 </div>
                 <div class="dtp-chart-card dtp-chart-card--half">

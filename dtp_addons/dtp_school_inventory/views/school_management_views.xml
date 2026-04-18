@@ -89,10 +89,10 @@
         <field name="name">Quan ly truong hoc</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,form</field>
-        <!-- <field name="view_ids" eval="[(5, 0, 0),
+        <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'list', 'view_id': ref('view_dtp_school_list')}),
             (0, 0, {'view_mode': 'form', 'view_id': ref('view_dtp_school_form')}),
-        ]"/> -->
+        ]"/>
         <field name="search_view_id" ref="view_dtp_school_search"/>
         <field name="domain">[('is_school', '=', True)]</field>
     </record>
@@ -108,6 +108,55 @@
             <xpath expr="//button[@name='207']" position="replace"/>
             <xpath expr="//field[@name='partner_id' and @nolabel='1']" position="attributes">
                 <attribute name="domain">[('is_school', '=', picking_type_code == 'outgoing')]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='origin']" position="replace">
+                <field name="return_deadline_date"
+                      invisible="picking_type_code != 'outgoing'"
+                      readonly="state in ['cancel', 'done']"/>
+                <field name="return_days_left"
+                       invisible="picking_type_code != 'outgoing' or not return_deadline_date"
+                       readonly="1"
+                       decoration-danger="return_days_left &lt; 0"
+                       decoration-warning="return_days_left == 0"
+                       decoration-success="return_days_left &gt; 0"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_tree_return_time" model="ir.ui.view">
+        <field name="name">stock.picking.list.return.time</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="replace">
+                <field name="return_deadline_date"
+                       optional="show"
+                       invisible="picking_type_code != 'outgoing'"/>
+                <field name="return_days_left"
+                       optional="show"
+                       invisible="picking_type_code != 'outgoing'"
+                       decoration-danger="return_days_left &lt; 0"
+                       decoration-warning="return_days_left == 0"
+                       decoration-success="return_days_left &gt; 0"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_search_return_time" model="ir.ui.view">
+        <field name="name">stock.picking.search.return.time</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="return_deadline_date"/>
+            </xpath>
+            <xpath expr="//filter[@name='delivery']" position="after">
+                <filter name="return_overdue"
+                        string="Return Overdue"
+                        domain="[('picking_type_code', '=', 'outgoing'), ('return_deadline_date', '&lt;', current_date)]"/>
+                <filter name="return_due_today"
+                        string="Return Due Today"
+                        domain="[('picking_type_code', '=', 'outgoing'), ('return_deadline_date', '=', current_date)]"/>
             </xpath>
         </field>
     </record>
