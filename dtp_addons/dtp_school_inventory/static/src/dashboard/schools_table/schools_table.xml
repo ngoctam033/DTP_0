@@ -35,7 +35,7 @@
 
                             <!-- Column: Type -->
                             <td>
-                                <span t-attf-class="dtp-badge-type dtp-type-{{ row.school_type }}">
+                                <span t-attf-class="dtp-badge-type dtp-type-{{ row.school_type_raw }}">
                                     <t t-esc="row.school_type"/>
                                 </span>
                             </td>

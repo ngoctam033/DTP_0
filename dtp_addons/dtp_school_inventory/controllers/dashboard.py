@@ -180,6 +180,7 @@ class DtpSchoolInventoryDashboard(http.Controller):
                 'id': school.id,
                 'name': school.name,
                 'school_type': school_type_labels.get(school.school_type, school.school_type),
+                'school_type_raw': school.school_type,
                 'region': region_labels.get(school.region, school.region),
                 'class_count': class_count,
                 'subject_count': subject_count,
