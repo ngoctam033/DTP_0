@@ -20,6 +20,35 @@ class StockPicking(models.Model):
         required=True,
         check_company=True, index='btree_not_null')
 
+    subject_id = fields.Many2one(
+        'res.partner.subject',
+        string='Subject',
+        help='The school subject this delivery is for.',
+    )
+
+    @api.onchange('subject_id')
+    def _onchange_subject_id(self):
+        """
+        Auto-load products from the subject's supply list into the picking lines.
+        Clears existing lines before loading new ones.
+        """
+        # Command (5, 0, 0) clears all existing records in the One2many field
+        new_lines = [(5, 0, 0)]
+
+        if self.subject_id and self.subject_id.supply_product_ids:
+            for product in self.subject_id.supply_product_ids:
+                new_lines.append((0, 0, {
+                    'description_picking': product.display_name,
+                    'product_id': product.id,
+                    'product_uom_qty': 1.0,
+                    'product_uom': product.uom_id.id,
+                    'location_id': self.location_id.id,
+                    'location_dest_id': self.location_dest_id.id,
+                    'picking_id': self._origin.id if self._origin else False,
+                }))
+        
+        self.move_ids = new_lines
+
     @api.depends('picking_type_code', 'return_deadline_date')
     def _compute_return_days_left(self):
         for picking in self:

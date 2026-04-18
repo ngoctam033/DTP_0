@@ -175,52 +175,30 @@
         </record>
 
         <!-- Subjects and linked supplies -->
-        <record id="subject_mn_a0_chu_cai" model="res.partner.subject">
+        <record id="subject_lam_quen_chu_cai" model="res.partner.subject">
             <field name="name">Lam quen chu cai</field>
-            <field name="class_id" ref="class_mn_a0"/>
+            <field name="class_ids" eval="[(6, 0, [ref('class_mn_a0'), ref('class_mn_a1')])]"/>
             <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_eraser')])]"/>
         </record>
-        <record id="subject_mn_a1_toan_tu_duy" model="res.partner.subject">
-            <field name="name">Toan tu duy</field>
-            <field name="class_id" ref="class_mn_a1"/>
-            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_ruler')])]"/>
+        <record id="subject_toan" model="res.partner.subject">
+            <field name="name">Toan</field>
+            <field name="class_ids" eval="[(6, 0, [ref('class_mn_a1'), ref('class_th_1a'), ref('class_th_3a'), ref('class_thcs_6a')])]"/>
+            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_ruler'), ref('product_supply_calculator')])]"/>
         </record>
-        <record id="subject_mn_a2_my_thuat" model="res.partner.subject">
+        <record id="subject_my_thuat" model="res.partner.subject">
             <field name="name">My thuat</field>
-            <field name="class_id" ref="class_mn_a2"/>
+            <field name="class_ids" eval="[(6, 0, [ref('class_mn_a2'), ref('class_th_1a')])]"/>
             <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_color_box'), ref('product_supply_notebook')])]"/>
         </record>
-
-        <record id="subject_th_1a_toan" model="res.partner.subject">
-            <field name="name">Toan</field>
-            <field name="class_id" ref="class_th_1a"/>
-            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_ruler')])]"/>
-        </record>
-        <record id="subject_th_3a_tieng_viet" model="res.partner.subject">
-            <field name="name">Tieng Viet</field>
-            <field name="class_id" ref="class_th_3a"/>
+        <record id="subject_tieng_viet_ngu_van" model="res.partner.subject">
+            <field name="name">Tieng Viet - Ngu van</field>
+            <field name="class_ids" eval="[(6, 0, [ref('class_th_3a'), ref('class_th_5a'), ref('class_thcs_9a')])]"/>
             <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_eraser')])]"/>
         </record>
-        <record id="subject_th_5a_tu_nhien_xh" model="res.partner.subject">
-            <field name="name">Tu nhien xa hoi</field>
-            <field name="class_id" ref="class_th_5a"/>
-            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_science_kit')])]"/>
-        </record>
-
-        <record id="subject_thcs_6a_toan" model="res.partner.subject">
-            <field name="name">Toan</field>
-            <field name="class_id" ref="class_thcs_6a"/>
-            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_geometry_set'), ref('product_supply_calculator')])]"/>
-        </record>
-        <record id="subject_thcs_8a_vat_ly" model="res.partner.subject">
-            <field name="name">Vat ly</field>
-            <field name="class_id" ref="class_thcs_8a"/>
+        <record id="subject_tu_nhien_khoa_hoc" model="res.partner.subject">
+            <field name="name">Tu nhien - Khoa hoc</field>
+            <field name="class_ids" eval="[(6, 0, [ref('class_th_5a'), ref('class_thcs_8a')])]"/>
             <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_science_kit'), ref('product_supply_notebook')])]"/>
-        </record>
-        <record id="subject_thcs_9a_ngu_van" model="res.partner.subject">
-            <field name="name">Ngu van</field>
-            <field name="class_id" ref="class_thcs_9a"/>
-            <field name="supply_product_ids" eval="[(6, 0, [ref('product_supply_notebook'), ref('product_supply_pencil'), ref('product_supply_eraser')])]"/>
         </record>
     </data>
 </odoo>

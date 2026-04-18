@@ -10,7 +10,7 @@
         <div class="dtp-filter-slicer">
             <label class="dtp-slicer-title">Khu vực</label>
             <select class="dtp-slicer-select" t-on-change="onRegionChange">
-                <option value="All">Tất cả</option>
+                <option value="">Tất cả</option>
                 <t t-foreach="props.options.regions" t-as="opt" t-key="opt.value">
                     <option
                         t-att-value="opt.value"

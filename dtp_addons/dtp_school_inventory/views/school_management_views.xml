@@ -109,6 +109,12 @@
             <xpath expr="//field[@name='partner_id' and @nolabel='1']" position="attributes">
                 <attribute name="domain">[('is_school', '=', picking_type_code == 'outgoing')]</attribute>
             </xpath>
+            <xpath expr="//field[@name='partner_id' and @nolabel='1']" position="after">
+                <field name="subject_id" 
+                       options="{'no_create': True}" 
+                       invisible="picking_type_code != 'outgoing'" 
+                       domain="[('class_ids.school_id', '=', partner_id)]"/>
+            </xpath>
             <xpath expr="//field[@name='origin']" position="replace">
                 <field name="return_deadline_date"
                       invisible="picking_type_code != 'outgoing'"
@@ -207,12 +213,7 @@
                     </group>
                     <notebook>
                         <page string="Mon hoc">
-                            <field name="subject_ids" readonly="1">
-                                <list create="false" edit="false" delete="false">
-                                    <field name="name"/>
-                                    <field name="supply_product_ids" widget="many2many_tags"/>
-                                </list>
-                            </field>
+                            <field name="subject_ids" widget="many2many_tags" readonly="1"/>
                         </page>
                     </notebook>
                 </sheet>
