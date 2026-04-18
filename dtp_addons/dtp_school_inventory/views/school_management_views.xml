@@ -234,13 +234,10 @@
         <field name="arch" type="xml">
             <search string="Mon hoc">
                 <field name="name"/>
-                <field name="class_id"/>
-                <field name="school_id"/>
-                <field name="region"/>
+                <field name="class_ids"/>
                 <group>
-                    <filter name="group_school" string="Truong" domain="[]" context="{'group_by': 'school_id'}"/>
+                    <filter name="group_class" string="Khoi lop" domain="[]" context="{'group_by': 'class_ids'}"/>
                     <filter name="group_subject" string="Mon hoc" domain="[]" context="{'group_by': 'name'}"/>
-                    <filter name="group_region" string="Khu vuc" domain="[]" context="{'group_by': 'region'}"/>
                 </group>
             </search>
         </field>
@@ -250,11 +247,9 @@
         <field name="name">res.partner.subject.list</field>
         <field name="model">res.partner.subject</field>
         <field name="arch" type="xml">
-            <list create="false" edit="false" delete="false">
+            <list>
                 <field name="name"/>
-                <field name="class_id"/>
-                <field name="school_id"/>
-                <field name="region"/>
+                <field name="class_ids" widget="many2many_tags"/>
                 <field name="supply_product_ids" widget="many2many_tags"/>
             </list>
         </field>
@@ -264,14 +259,12 @@
         <field name="name">res.partner.subject.form</field>
         <field name="model">res.partner.subject</field>
         <field name="arch" type="xml">
-            <form create="false" edit="false" delete="false">
+            <form>
                 <sheet>
                     <group>
-                        <field name="name" readonly="1"/>
-                        <field name="class_id" readonly="1"/>
-                        <field name="school_id" readonly="1"/>
-                        <field name="region" readonly="1"/>
-                        <field name="supply_product_ids" widget="many2many_tags" readonly="1"/>
+                        <field name="name"/>
+                        <field name="class_ids" widget="many2many_tags"/>
+                        <field name="supply_product_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
             </form>
@@ -283,7 +276,6 @@
         <field name="res_model">res.partner.subject</field>
         <field name="view_mode">list,form</field>
         <field name="search_view_id" ref="view_dtp_school_subject_search"/>
-        <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
     </record>
 
 </odoo>

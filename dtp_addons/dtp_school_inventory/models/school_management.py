@@ -63,7 +63,13 @@ class DtpSchoolClass(models.Model):
         required=True,
     )
     school_id = fields.Many2one('res.partner', required=True, ondelete='cascade')
-    subject_ids = fields.One2many('res.partner.subject', 'class_id', string='Subjects')
+    subject_ids = fields.Many2many(
+        'res.partner.subject',
+        'res_partner_class_subject_rel',
+        'class_id',
+        'subject_id',
+        string='Subjects',
+    )
     region = fields.Selection(related='school_id.region', store=True)
 
 
@@ -72,7 +78,11 @@ class DtpSchoolSubject(models.Model):
     _description = 'Class Subject'
 
     name = fields.Char(required=True)
-    class_id = fields.Many2one('res.partner.class', required=True, ondelete='cascade')
-    school_id = fields.Many2one('res.partner', related='class_id.school_id', store=True)
-    region = fields.Selection(related='school_id.region', store=True)
+    class_ids = fields.Many2many(
+        'res.partner.class',
+        'res_partner_class_subject_rel',
+        'subject_id',
+        'class_id',
+        string='Classes',
+    )
     supply_product_ids = fields.Many2many('product.product', string='Learning Supplies')
