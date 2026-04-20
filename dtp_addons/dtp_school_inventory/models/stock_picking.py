@@ -58,3 +58,34 @@ class StockPicking(models.Model):
 
             today = fields.Date.context_today(picking)
             picking.return_days_left = (picking.return_deadline_date - today).days
+
+    def _action_done(self):
+        """
+        Propagate partner_id (school/unit) → owner_id on destination stock.quant
+        after an outgoing picking is validated.
+        Flow: stock.picking → stock.quant
+        """
+        result = super()._action_done()
+
+        # Only process outgoing pickings that have a partner (school/unit)
+        for picking in self.filtered(
+            lambda p: p.picking_type_code == 'outgoing' and p.partner_id and p.state == 'done'
+        ):
+            partner = picking.partner_id
+            for move in picking.move_ids.filtered(lambda m: m.state == 'done'):
+                dest_location = move.location_dest_id
+                product = move.product_id
+                lot_ids = move.move_line_ids.mapped('lot_id').ids
+
+                domain = [
+                    ('location_id', '=', dest_location.id),
+                    ('product_id', '=', product.id),
+                ]
+                if lot_ids:
+                    domain.append(('lot_id', 'in', lot_ids))
+
+                quants = self.env['stock.quant'].sudo().search(domain)
+                if quants:
+                    quants.sudo().write({'owner_id': partner.id})
+
+        return result
