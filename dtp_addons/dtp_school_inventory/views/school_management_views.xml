@@ -112,8 +112,7 @@
             <xpath expr="//field[@name='partner_id' and @nolabel='1']" position="after">
                 <field name="subject_id" 
                        options="{'no_create': True}" 
-                       invisible="picking_type_code != 'outgoing'" 
-                       domain="[('class_ids.school_id', '=', partner_id)]"/>
+                       />
             </xpath>
             <xpath expr="//field[@name='origin']" position="replace">
                 <field name="return_deadline_date"
