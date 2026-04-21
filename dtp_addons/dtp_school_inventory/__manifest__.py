@@ -11,6 +11,7 @@
         'views/school_management_views.xml',
         'views/stock_menu_custom_views.xml',
         'views/dashboard_action.xml',
+        'wizard/inventory_export_csv_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
