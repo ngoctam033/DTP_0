@@ -12,7 +12,7 @@
         <div class="dtp-dashboard-header">
             <div class="dtp-dashboard-title">
                 <i class="fa fa-bar-chart me-2"/>
-                <span>Inventory Dashboard – Quản lý Dụng cụ Học tập</span>
+                <span>Inventory Dashboard – Quản lý Dụng cụ Học tập DTP - STEAM</span>
             </div>
             <button class="btn btn-sm btn-outline-dark" t-on-click="onResetFilters">
                 <i class="fa fa-refresh me-1"/> Đặt lại bộ lọc
