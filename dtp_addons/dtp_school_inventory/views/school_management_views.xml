@@ -39,6 +39,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="is_school" invisible="1"/>
                             <field name="name"/>
                             <field name="school_type"/>
                             <field name="region"/>
@@ -95,6 +96,7 @@
         ]"/>
         <field name="search_view_id" ref="view_dtp_school_search"/>
         <field name="domain">[('is_school', '=', True)]</field>
+        <field name="context">{'default_is_school': True}</field>
     </record>
 
     <!-- Task_9: inherit stock picking form to filter partner_id domain by picking type -->

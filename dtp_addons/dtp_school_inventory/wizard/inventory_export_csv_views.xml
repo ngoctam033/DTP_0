@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_inventory_export_csv_form" model="ir.ui.view">
-        <field name="name">inventory.export.csv.form</field>
+    <record id="view_inventory_export_excel_form" model="ir.ui.view">
+        <field name="name">inventory.export.excel.form</field>
         <field name="model">inventory.export.csv</field>
         <field name="arch" type="xml">
-            <form string="Export Inventory to CSV">
+            <form string="Xuất dữ liệu Inventory ra Excel">
                 <field name="state" invisible="1"/>
                 <div invisible="state != 'choose'">
-                    <p>Nhấn vào nút bên dưới để xuất dữ liệu Inventory thành nhiều file CSV, nằm chung trong một thư mục bên trong file ZIP.</p>
+                    <p>Nhấn vào nút bên dưới để xuất dữ liệu Inventory thành file Excel, mỗi bảng dữ liệu sẽ nằm trong một sheet.</p>
                 </div>
                 <div invisible="state != 'get'">
                     <field name="name" invisible="1"/>
                     <p>File đang chờ tải về: <field name="export_file" filename="name" nolabel="1"/></p>
                 </div>
                 <footer>
-                    <button string="Xuất ZIP CSV" name="action_export_csv" type="object" class="btn-primary" invisible="state != 'choose'"/>
+                    <button string="Xuất Excel" name="action_export_excel" type="object" class="btn-primary" invisible="state != 'choose'"/>
                     <button string="Đóng" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>
     </record>
 
-    <record id="action_inventory_export_csv" model="ir.actions.act_window">
-        <field name="name">Export Inventory CSV</field>
+    <record id="action_inventory_export_excel" model="ir.actions.act_window">
+        <field name="name">Xuất Inventory ra Excel</field>
         <field name="res_model">inventory.export.csv</field>
         <field name="view_mode">form</field>
+        <field name="view_id" ref="view_inventory_export_excel_form"/>
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_inventory_export_csv"
-              name="Export Inventory to CSV"
+    <menuitem id="menu_inventory_export_excel"
+              name="Xuất Inventory ra Excel"
               parent="stock.menu_warehouse_report"
-              action="action_inventory_export_csv"
+              action="action_inventory_export_excel"
               sequence="100"/>
 </odoo>
