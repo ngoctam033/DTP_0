@@ -77,6 +77,14 @@
                     clickable="true"
                     onCardClick.bind="() => this.onKpiClick('stock.picking', [['state', 'in', ['confirmed', 'waiting', 'assigned']], ['scheduled_date', '&lt;=', this._now]])"
                 />
+                <KpiCard
+                    label="'Sắp hết hàng'"
+                    value="state.kpis.low_stock_products"
+                    icon="'fa-battery-quarter'"
+                    colorClass="'kpi-orange'"
+                    clickable="true"
+                    onCardClick.bind="() => this.onLowStockClick()"
+                />
             </div>
 
             <!-- Row 2: Donut + Top Products bar -->

@@ -17,6 +17,27 @@
         <field name="group_ids" eval="[(6, 0, [ref('stock.group_stock_user')])]"/>
     </record>
 
+    <!-- Inherited orderpoint list view – action buttons removed for read-only KPI drill-down -->
+    <record id="view_dtp_orderpoint_tree_no_buttons" model="ir.ui.view">
+        <field name="name">dtp.stock.warehouse.orderpoint.list.no.buttons</field>
+        <field name="model">stock.warehouse.orderpoint</field>
+        <field name="inherit_id" ref="stock.view_warehouse_orderpoint_tree_editable"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <!-- Hide all action buttons; keep data fields visible -->
+            <xpath expr="//button[@name='action_product_forecast_report']" position="replace"/>
+            <xpath expr="//button[@name='action_stock_replenishment_info']" position="replace"/>
+            <xpath expr="//button[@name='action_remove_manual_qty_to_order']" position="replace"/>
+            <xpath expr="//button[@name='action_replenish']" position="replace"/>
+            <xpath expr="//button[@name='action_replenish_auto']" position="replace"/>
+            <xpath expr="//button[@icon='fa-bell-slash']" position="replace"/>
+        </field>
+    </record>
+
+    <record id="stock.action_orderpoint_replenish" model="ir.actions.act_window">
+        <field name="view_id" ref="view_dtp_orderpoint_tree_no_buttons"/>
+    </record>
+
     <menuitem id="menu_dtp_school_root" name="Truong hoc" parent="stock.menu_stock_root" sequence="80"/>
     <menuitem id="menu_dtp_school_management" name="Truong hoc" parent="menu_dtp_school_root" action="action_dtp_school" sequence="1"/>
     <menuitem id="menu_dtp_school_classes" name="Lop hoc" parent="menu_dtp_school_root" action="action_dtp_school_class" sequence="2"/>

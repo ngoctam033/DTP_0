@@ -84,12 +84,17 @@ class DtpSchoolInventoryDashboard(http.Controller):
             ('scheduled_date', '<=', fields.Datetime.now()),
         ])
 
+        low_stock_products = request.env['stock.warehouse.orderpoint'].search_count(
+            [('qty_to_order', '>', 0.0)]
+        )
+
         return {
             'total_schools': total_schools,
             'total_classes': total_classes,
             'pending_pickings': pending_pickings,
             'draft_pickings': draft_pickings,
             'late_pickings': late_pickings,
+            'low_stock_products': low_stock_products,
         }
 
     # --- Bar / Donut: Pickings by state ---

@@ -161,6 +161,16 @@ export class DtpInventoryDashboard extends Component {
             target: "current",
         });
     }
+
+    /**
+     * Navigate to the low-stock replenishment view (read-only, no action buttons).
+     */
+    onLowStockClick() {
+        this.actionService.doAction(
+            "stock.action_orderpoint_replenish",
+            { target: "current" }
+        );
+    }
 }
 
 registry.category("actions").add("dtp_school_inventory_dashboard", DtpInventoryDashboard);

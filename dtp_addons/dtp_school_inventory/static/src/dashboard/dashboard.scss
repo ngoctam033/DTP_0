@@ -39,6 +39,7 @@
     --kpi-green:  #16a34a;
     --kpi-gray:   #475569;
     --kpi-red:    #dc2626;
+    --kpi-orange: #ea580c;
 }
 
 /* ─── 2. Layout shell ────────────────────────────────────────────────────── */
@@ -196,6 +197,7 @@
 .dtp-kpi-card.kpi-green  { border-left-color: var(--kpi-green); }
 .dtp-kpi-card.kpi-gray   { border-left-color: var(--kpi-gray);  }
 .dtp-kpi-card.kpi-red    { border-left-color: var(--kpi-red);   }
+.dtp-kpi-card.kpi-orange { border-left-color: var(--kpi-orange); }
 
 .dtp-kpi-card--clickable {
     cursor: pointer;
@@ -218,6 +220,7 @@
 .dtp-kpi-card.kpi-green .dtp-kpi-icon { color: var(--kpi-green); }
 .dtp-kpi-card.kpi-gray  .dtp-kpi-icon { color: var(--kpi-gray);  }
 .dtp-kpi-card.kpi-red   .dtp-kpi-icon { color: var(--kpi-red);   }
+.dtp-kpi-card.kpi-orange .dtp-kpi-icon { color: var(--kpi-orange); }
 
 .dtp-kpi-content { flex: 1; }
 
