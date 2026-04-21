@@ -3,8 +3,8 @@
     <record id="stock.menu_stock_adjustments" model="ir.ui.menu">
         <field name="active" eval="True"/>
     </record>
-    <record id="stock.menu_stock_procurement" model="ir.ui.menu">
-        <field name="active" eval="True"/>
+    <record id="stock.menu_stock_references" model="ir.ui.menu">
+        <field name="active" eval="False"/>
     </record>
     <record id="stock.menu_action_inventory_tree" model="ir.ui.menu">
         <field name="active" eval="False"/>
